@@ -325,16 +325,19 @@ int binaryToDecimal(string bin)
 {
     return stoi(bin,0,2);
 }
+
 string decimalToBinary(int dec)
 {
     return bitset<16>(dec).to_string();
 }
+
 string decimalToHex(int dec)
 {
     stringstream ss;
     ss<<hex<<dec;
     return ss.str();
 }
+
 int hexToDecimal(string hex)
 {
     int dec;
@@ -343,6 +346,7 @@ int hexToDecimal(string hex)
     ss>>dec;
     return dec;
 }
+
 string binaryToHex(string bin)
 {
     int dec = stoi(bin,0,2);
@@ -350,6 +354,7 @@ string binaryToHex(string bin)
     ss<<hex<<dec;
     return ss.str();
 }
+
 string hexToBinary(string hex)
 {
     int dec;
@@ -358,16 +363,19 @@ string hexToBinary(string hex)
     ss>>dec;
     return bitset<16>(dec).to_string();
 }
+
 int octalToDecimal(string oct)
 {
     return stoi(oct,0,8);
 }
+
 string decimalToOctal(int dec)
 {
     stringstream ss;
     ss<<oct<<dec;
     return ss.str();
 }
+
 string binaryToOctal(string bin)
 {
     int dec = stoi(bin,0,2);
@@ -375,11 +383,13 @@ string binaryToOctal(string bin)
     ss<<oct<<dec;
     return ss.str();
 }
+
 string octalToBinary(string oct)
 {
     int dec = stoi(oct,0,8);   
     return bitset<16>(dec).to_string();  
 }
+
 string hexToOctal(string hex)
 {
     int dec;
@@ -390,6 +400,7 @@ string hexToOctal(string hex)
     ss2<<oct<<dec;
     return ss2.str();
 }
+
 string octalToHex(string oct)
 {
     int dec = stoi(oct,0,8);   
@@ -406,6 +417,7 @@ int precedence(char op)
     if(op=='*'||op=='/') return 2;
     return 0;
 }
+
 double applyOperation(double a,double b,char op)
 {
     if(op=='+') return a+b;
@@ -414,6 +426,7 @@ double applyOperation(double a,double b,char op)
     if(op=='/') return a/b;
     return 0;
 }
+
 double parseExpression(string exp)
 {
     stack<double> values;
@@ -574,6 +587,7 @@ void saveHistory(string entry)
     ofstream file("history.txt",ios::app);
     file<<entry<<endl;
 }
+
 void viewHistory()
 {
     ifstream file("history.txt");
@@ -595,10 +609,19 @@ double evaluateExpression()
     if(op=='+') return add(a,b);
     if(op=='-') return sub(a,b);
     if(op=='*') return mul(a,b);
-    if(op=='/') return divi(a,b);
+    if(op=='/')
+        {
+            if(b == 0)
+            {
+                cout<<"Error: Division by zero is not allowed!\n";
+                return 0; 
+            }
+            return divi(a,b);
+        }
     cout<<"Invalid operator\n";
     return 0;
 }
+
 };
 
 // ---------------- MENU ----------------
@@ -706,240 +729,210 @@ cout<<"0 Back\n";
 // ---------------- MAIN ----------------
 
 int main()
-{
-    
-Calculator calc;
-int choice;
+{    
+    Calculator calc;
+    int choice;
+    while(true)
+    {
 
-while(true)
-{
+    mainMenu();
+    cout<<"Enter your choice: ";
+    cin>>choice;
+    if(choice==0) break;
 
-mainMenu();
-cout<<"Enter your choice: ";
-cin>>choice;
+    switch(choice)
+    {
 
-if(choice==0) break;
+    case 1:
+    {
+        int c;
+        basicMenu();
+        cout<<"Enter your choice: ";
+        cin>>c;
 
-switch(choice)
-{
+        double x;
+        int n;
 
-case 1:
-{
-int c;
-basicMenu();
-cout<<"Enter your choice: ";
-cin>>c;
+        switch(c)
+        {
+            case 1:
+            {
+                double result=calc.evaluateExpression();
+                cout<<"Result = "<<result<<endl;
+                break;
+            }
+            case 2: cin>>x; cout<<calc.square(x)<<endl; break;
+            case 3: cin>>x; cout<<calc.cube(x)<<endl; break;
+            case 4: cin>>x; cout<<calc.squareroot(x)<<endl; break;
+            case 5: cin>>n; cout<<calc.factorial(n)<<endl; break;
+        }
+        break;
+    }
 
-double x;
-int n;
+    case 2:
+    {
+        int c;
+        trigMenu();
+        cout<<"Enter your choice: ";
+        cin>>c;
 
-switch(c)
-{
-case 1:
-{
-double result=calc.evaluateExpression();
-cout<<"Result = "<<result<<endl;
-break;
-}
+        double x;
 
-case 2: cin>>x; cout<<calc.square(x)<<endl; break;
-case 3: cin>>x; cout<<calc.cube(x)<<endl; break;
-case 4: cin>>x; cout<<calc.squareroot(x)<<endl; break;
-case 5: cin>>n; cout<<calc.factorial(n)<<endl; break;
-}
+        switch(c)
+        {
+            case 1: cin>>x; cout<<calc.sine(x)<<endl; break;
+            case 2: cin>>x; cout<<calc.cosine(x)<<endl; break;
+            case 3: cin>>x; cout<<calc.tangent(x)<<endl; break;
+            case 4: cin>>x; cout<<calc.cot(x)<<endl; break;
+            case 5: cin>>x; cout<<calc.sec(x)<<endl; break;
+            case 6: cin>>x; cout<<calc.cosec(x)<<endl; break;
+        }
+        break;
+    }
 
-break;
-}
+    case 3:
+    {
+        int c;
+        logMenu();
+        cin>>c;
 
-case 2:
-{
-int c;
-trigMenu();
-cout<<"Enter your choice: ";
-cin>>c;
+        double x;
 
-double x;
+        if(c==1){ cin>>x; cout<<calc.log10calc(x)<<endl; }
+        if(c==2){ cin>>x; cout<<calc.ln(x)<<endl; }
+        break;
+    }
 
-switch(c)
-{
-case 1: cin>>x; cout<<calc.sine(x)<<endl; break;
-case 2: cin>>x; cout<<calc.cosine(x)<<endl; break;
-case 3: cin>>x; cout<<calc.tangent(x)<<endl; break;
-case 4: cin>>x; cout<<calc.cot(x)<<endl; break;
-case 5: cin>>x; cout<<calc.sec(x)<<endl; break;
-case 6: cin>>x; cout<<calc.cosec(x)<<endl; break;
-}
+    case 4:
+    {
+        int c;
+        statsMenu();
+        cin>>c;
+        int size;
+        cout<<"Elements: ";
+        cin>>size;
+        vector<double> data(size);
+        for(int i=0;i<size;i++)
+        cin>>data[i];
+        if(c==1)
+        cout<<"Mean = "<<calc.mean(data)<<endl;
+        if(c==2)
+        cout<<"Variance = "<<calc.variance(data)<<endl;
+        break;
+    }
 
-break;
-}
+    case 5:
+    {
+        int c;
+        matrixMenu();
+        cin>>c;
+        if(c==1) calc.matrixAddition();
+        if(c==2) calc.matrixSubtraction();
+        if(c==3) calc.matrixMultiplication();
+        if(c==4) calc.matrixDivision();
+        if(c==5) calc.matrixTranspose();
+        if(c==6) calc.matrixInverse();
+        if(c==7) calc.matrixDeterminant();
+        break;
+    }
 
-case 3:
-{
-int c;
-logMenu();
-cin>>c;
+    case 6:
+    {
+        int c;
+        conversionMenu();
+        cin>>c;
 
-double x;
+        string s;
+        int n;
 
-if(c==1){ cin>>x; cout<<calc.log10calc(x)<<endl; }
-if(c==2){ cin>>x; cout<<calc.ln(x)<<endl; }
+        if(c==1){cin>>s; cout<<calc.binaryToDecimal(s)<<endl;}
+        if(c==2){cin>>n; cout<<calc.decimalToBinary(n)<<endl;}
+        if(c==3){cin>>n; cout<<calc.decimalToHex(n)<<endl;}
+        if(c==4){cin>>s; cout<<calc.hexToDecimal(s)<<endl;}
+        if(c==5){cin>>s; cout<<calc.binaryToHex(s)<<endl;}
+        if(c==6){cin>>s; cout<<calc.hexToBinary(s)<<endl;}
+        if(c==7){cin>>s; cout<<calc.octalToDecimal(s)<<endl;}
+        if(c==8){cin>>n; cout<<calc.decimalToOctal(n)<<endl;}
+        if(c==9){cin>>s; cout<<calc.binaryToOctal(s)<<endl;}
+        if(c==10){cin>>s; cout<<calc.hexToOctal(s)<<endl;}
+        if(c==11){cin>>s; cout<<calc.octalToBinary(s)<<endl;}
+        if(c==12){cin>>s; cout<<calc.octalToHex(s)<<endl;}
+        break;
+    }
 
-break;
-}
+    case 7:
+    {
+        int c;
+        memoryMenu();
+        cin>>c;
 
-case 4:
-{
-int c;
-statsMenu();
-cin>>c;
+    double x;
 
-int size;
-cout<<"Elements: ";
-cin>>size;
+        if(c==1){cin>>x; calc.memoryAdd(x);}
+        if(c==2){cout<<"Memory = "<<calc.memoryRecall()<<endl;}
+        if(c==3){calc.memoryClear();}
+    break;
+    }
 
-vector<double> data(size);
+    case 8:
+    {
+        string exp;
+        cin.ignore();
+        getline(cin,exp);
+        cout<<"Result = "<<calc.parseExpression(exp)<<endl;
+        break;
+    }
 
-for(int i=0;i<size;i++)
-cin>>data[i];
+    case 9:
+    {
+        cout<<"1 Linear\n2 Quadratic\n";
+        int c;
+        cin>>c;
+        if(c==1) calc.solveLinear();
+        if(c==2) calc.solveQuadratic();
+        break;
+    }
 
-if(c==1)
-cout<<"Mean = "<<calc.mean(data)<<endl;
+    case 10:
+    {
+        cout<<"1 Derivative\n2 Integration\n";
+        int c;
+        cin>>c;
 
-if(c==2)
-cout<<"Variance = "<<calc.variance(data)<<endl;
+        if(c==1)
+        {
+            string exp;
+            double x;
+            cin.ignore();
+            getline(cin,exp);
+            cin>>x;
+            cout<<calc.derivative(exp,x)<<endl;
+        }
 
-break;
-}
+        if(c==2)
+        {
+            string exp;
+            double a,b;
+            int n;
+            cin.ignore();
+            getline(cin,exp);
+            cin>>a>>b>>n;
+            cout<<calc.integrate(exp,a,b,n)<<endl;
+        }
+        break;
+    }
 
-case 5:
-{
-int c;
-matrixMenu();
-cin>>c;
+    case 11:
+    {
+        int n;
+        cin>>n;
+        cout<<(calc.isPrime(n)?"Prime":"Not Prime")<<endl;
+        break;
+    }
 
-if(c==1) calc.matrixAddition();
-if(c==2) calc.matrixSubtraction();
-if(c==3) calc.matrixMultiplication();
-if(c==4) calc.matrixDivision();
-if(c==5) calc.matrixTranspose();
-if(c==6) calc.matrixInverse();
-if(c==7) calc.matrixDeterminant();
-
-break;
-}
-
-case 6:
-{
-int c;
-conversionMenu();
-cin>>c;
-
-string s;
-int n;
-
-if(c==1){cin>>s; cout<<calc.binaryToDecimal(s)<<endl;}
-if(c==2){cin>>n; cout<<calc.decimalToBinary(n)<<endl;}
-if(c==3){cin>>n; cout<<calc.decimalToHex(n)<<endl;}
-if(c==4){cin>>s; cout<<calc.hexToDecimal(s)<<endl;}
-if(c==5){cin>>s; cout<<calc.binaryToHex(s)<<endl;}
-if(c==6){cin>>s; cout<<calc.hexToBinary(s)<<endl;}
-if(c==7){cin>>s; cout<<calc.octalToDecimal(s)<<endl;}
-if(c==8){cin>>n; cout<<calc.decimalToOctal(n)<<endl;}
-if(c==9){cin>>s; cout<<calc.binaryToOctal(s)<<endl;}
-if(c==10){cin>>s; cout<<calc.hexToOctal(s)<<endl;}
-if(c==11){cin>>s; cout<<calc.octalToBinary(s)<<endl;}
-if(c==12){cin>>s; cout<<calc.octalToHex(s)<<endl;}
-
-break;
-}
-
-case 7:
-{
-int c;
-memoryMenu();
-cin>>c;
-
-double x;
-
-if(c==1){cin>>x; calc.memoryAdd(x);}
-if(c==2){cout<<"Memory = "<<calc.memoryRecall()<<endl;}
-if(c==3){calc.memoryClear();}
-
-break;
-}
-
-case 8:
-{
-string exp;
-cin.ignore();
-getline(cin,exp);
-
-cout<<"Result = "<<calc.parseExpression(exp)<<endl;
-break;
-}
-
-case 9:
-{
-cout<<"1 Linear\n2 Quadratic\n";
-int c;
-cin>>c;
-
-if(c==1) calc.solveLinear();
-if(c==2) calc.solveQuadratic();
-
-break;
-}
-
-case 10:
-{
-cout<<"1 Derivative\n2 Integration\n";
-int c;
-cin>>c;
-
-if(c==1)
-{
-string exp;
-double x;
-
-cin.ignore();
-getline(cin,exp);
-
-cin>>x;
-
-cout<<calc.derivative(exp,x)<<endl;
-}
-
-if(c==2)
-{
-string exp;
-double a,b;
-int n;
-
-cin.ignore();
-getline(cin,exp);
-
-cin>>a>>b>>n;
-
-cout<<calc.integrate(exp,a,b,n)<<endl;
-}
-
-break;
-}
-
-case 11:
-{
-int n;
-cin>>n;
-cout<<(calc.isPrime(n)?"Prime":"Not Prime")<<endl;
-break;
-}
-
-case 12:
-calc.viewHistory();
-break;
-
-}
-
-}
-
+    case 12:
+    calc.viewHistory();
+    break;
+    }
+    }
 }
