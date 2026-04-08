@@ -6,6 +6,7 @@
 #include <bitset>
 #include <stack>
 #include <cctype>
+#include <limits>
 
 using namespace std;
 
@@ -96,8 +97,8 @@ double mean(vector<double> data)
     double sum=0;
 
     for(double x:data)
-        sum+=x;
 
+        sum+=x;
     return sum/data.size();
 }
 
@@ -423,7 +424,15 @@ double applyOperation(double a,double b,char op)
     if(op=='+') return a+b;
     if(op=='-') return a-b;
     if(op=='*') return a*b;
-    if(op=='/') return a/b;
+    if(op=='/')
+    {
+        if(b==0)
+        {
+            cout<<"Division by zero error\n";
+            return 0;
+        }
+        return a/b;
+    }
     return 0;
 }
 
@@ -531,35 +540,33 @@ void solveQuadratic()
 
 // ---------------- DERIVATIVE (NUMERICAL) ----------------
 
+string replaceX(string exp, double val)
+{
+    string result = "";
+    for(int i = 0; i < exp.size(); i++)
+    {
+        if(exp[i] == 'x')
+            result += to_string(val);
+        else
+            result += exp[i];
+    }
+    return result;
+}
 double derivative(string exp,double x)
 {
     double h = 0.00001;
-    string exp1 = exp;
-    string exp2 = exp;
-    for(int i=0;i<exp1.size();i++)
-        if(exp1[i]=='x')
-            exp1.replace(i,1,to_string(x+h));
-    for(int i=0;i<exp2.size();i++)
-        if(exp2[i]=='x')
-            exp2.replace(i,1,to_string(x-h));
+
+    string exp1 = replaceX(exp, x + h);
+    string exp2 = replaceX(exp, x - h);
+
     double f1 = parseExpression(exp1);
     double f2 = parseExpression(exp2);
-    return (f1-f2)/(2*h);
+
+    return (f1 - f2) / (2 * h);
 }
 
 // ---------------- INTEGRATION (TRAPEZOIDAL RULE) ----------------
-string replaceX(string exp, double val)
-    {
-        string result = "";
-        for(int i = 0; i < exp.size(); i++)
-        {
-            if(exp[i] == 'x')
-                result += to_string(val);
-            else
-                result += exp[i];
-        }
-        return result;
-    }
+
 double integrate(string exp,double a,double b,int n)
 {
     double h = (b-a)/n;
@@ -567,10 +574,7 @@ double integrate(string exp,double a,double b,int n)
     for(int i=0;i<=n;i++)
     {
         double x = a + i*h;
-        string temp = exp;
-        for(int j=0;j<temp.size();j++)
-            if(temp[j]=='x')
-                temp.replace(j,1,to_string(x));
+        string temp = replaceX(exp, x);
         double fx = parseExpression(temp);
         if(i==0 || i==n)
             sum += fx;
@@ -877,7 +881,7 @@ int main()
     case 8:
     {
         string exp;
-        cin.ignore();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         getline(cin,exp);
         cout<<"Result = "<<calc.parseExpression(exp)<<endl;
         break;
@@ -903,7 +907,7 @@ int main()
         {
             string exp;
             double x;
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin,exp);
             cin>>x;
             cout<<calc.derivative(exp,x)<<endl;
@@ -914,7 +918,7 @@ int main()
             string exp;
             double a,b;
             int n;
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin,exp);
             cin>>a>>b>>n;
             cout<<calc.integrate(exp,a,b,n)<<endl;
@@ -935,4 +939,5 @@ int main()
     break;
     }
     }
+    return 0;
 }
