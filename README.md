@@ -151,17 +151,6 @@ Result: 40
 
 ---
 
-## 🗺️ Roadmap
-
-- [x] Basic and scientific operations
-- [x] Matrices, statistics, calculus
-- [x] Expression parser and history
-- [ ] Graph plotting
-- [ ] Unit conversions
-- [ ] GUI version
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome! Fork the repo, create a branch, and open a pull request.
